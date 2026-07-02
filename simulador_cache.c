@@ -20,8 +20,8 @@
 	
 	Contador cnt_arquivo = {0, 0};
 	Contador cnt_memoria = {0, 0};
-	Contador cnt_acerto  = {0, 0};
-	Contador cnt_falha   = {0, 0};
+	Contador cnt_acerto = {0, 0};
+	Contador cnt_falha = {0, 0};
 	
 	int potenciaDeDois(int n) {
 	    if(n == 0) return 0;
@@ -39,8 +39,8 @@
 	        c[i] = (LinhaCache*) malloc(assoc * sizeof(LinhaCache));
 	        for(j = 0; j < assoc; j++) {
 	            c[i][j].valido = 0;
-	            c[i][j].dirty  = 0;
-	            c[i][j].lru    = TEMPO_LRU_PADRAO;
+	            c[i][j].dirty = 0;
+	            c[i][j].lru = TEMPO_LRU_PADRAO;
 	            c[i][j].rotulo = 0;
 	        }
 	    }
@@ -53,9 +53,8 @@
 	    free(c);
 	}
 	
-	void extrairCampos(uint32_t endereco, int bitsOffset, int bitsConj,
-	                   int *idx, uint32_t *rotulo) {
-	    *idx    = (endereco >> bitsOffset) & ((1 << bitsConj) - 1);
+	void extrairCampos(uint32_t endereco, int bitsOffset, int bitsConj, int *idx, uint32_t *rotulo) {
+	    *idx = (endereco >> bitsOffset) & ((1 << bitsConj) - 1);
 	    *rotulo = (endereco >> bitsOffset) >> bitsConj;
 	}
 	
@@ -98,9 +97,9 @@
 	    for(i = 0; i < assoc; i++) {
 	        if(!c[idx][i].valido) {
 	            c[idx][i].valido = 1;
-	            c[idx][i].dirty  = 0;
+	            c[idx][i].dirty = 0;
 	            c[idx][i].rotulo = rotulo;
-	            c[idx][i].lru    = TEMPO_LRU_PADRAO;
+	            c[idx][i].lru = TEMPO_LRU_PADRAO;
 	            return;
 	        }
 	    }
@@ -111,9 +110,9 @@
 	        cnt_memoria.escrita++;
 	
 	    c[idx][vitima].valido = 1;
-	    c[idx][vitima].dirty  = 0;
+	    c[idx][vitima].dirty = 0;
 	    c[idx][vitima].rotulo = rotulo;
-	    c[idx][vitima].lru    = TEMPO_LRU_PADRAO;
+	    c[idx][vitima].lru = TEMPO_LRU_PADRAO;
 	}
 	
 	int escreverCache(LinhaCache **c, uint32_t endereco, int bitsOffset, int bitsConj, int pol_escrita, char *pol_subst, int assoc) {
@@ -143,9 +142,9 @@
 	    for(i = 0; i < assoc; i++) {
 	        if(!c[idx][i].valido) {
 	            c[idx][i].valido = 1;
-	            c[idx][i].dirty  = 1;
+	            c[idx][i].dirty = 1;
 	            c[idx][i].rotulo = rotulo;
-	            c[idx][i].lru    = TEMPO_LRU_PADRAO;
+	            c[idx][i].lru = TEMPO_LRU_PADRAO;
 	            return 0;
 	        }
 	    }
@@ -156,9 +155,9 @@
 	        cnt_memoria.escrita++;
 	
 	    c[idx][vitima].valido = 1;
-	    c[idx][vitima].dirty  = 1;
+	    c[idx][vitima].dirty = 1;
 	    c[idx][vitima].rotulo = rotulo;
-	    c[idx][vitima].lru    = TEMPO_LRU_PADRAO;
+	    c[idx][vitima].lru = TEMPO_LRU_PADRAO;
 	    return 0;
 	}
 	
@@ -166,8 +165,9 @@
 	    int i, j;
 	    for(i = 0; i < conjuntos; i++)
 	        for(j = 0; j < assoc; j++)
-	            if(c[i][j].lru > 0)
-	                c[i][j].lru--;
+	            if(c[i][j].lru > 0) {
+    		    	c[i][j].lru--;
+				}
 	}
 	
 	void flushCache(LinhaCache **c, int conjuntos, int assoc) {
